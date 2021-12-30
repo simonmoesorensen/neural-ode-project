@@ -1,9 +1,22 @@
 # Authors
 
+
 # Introduction
 
 [Link to paper](http://link.com)
 
-# How to run
+# Code structure
 
-# How to contribute
+## Source files
+
+## Experiments
+
+# Running the code
+
+## Setup environment
+
+## Run python notebook
+
+## Submit scripts
+
+# Contribution

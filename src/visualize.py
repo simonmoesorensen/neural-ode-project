@@ -110,7 +110,7 @@ class Visualizer:
                 plt.legend()
 
             logging.info('Saved reconstruction at {}'.format(self.save_folder + fname))
-            plt.savefig(self.save_folder + fname, dpi=500)
+            plt.savefig(self.save_folder + fname, dpi=250)
 
     def plot_reconstruction_grid(self, fname, t_pos=np.pi, t_neg=np.pi, size=5, test=False):
         # We unwrap the trajectories from the data object
@@ -192,7 +192,7 @@ class Visualizer:
                 plt.legend()
 
             logging.info('Saved reconstruction grid plot at {}'.format(self.save_folder + fname))
-            plt.savefig(self.save_folder + fname, dpi=500)
+            plt.savefig(self.save_folder + fname, dpi=250)
 
     def plot_original_grid(self, fname):
         # We unwrap the trajectories from the data object
@@ -208,7 +208,7 @@ class Visualizer:
         plt.legend(['orig_trajs'])
 
         logging.info('Saved original grid plot at {}'.format(self.save_folder + fname))
-        plt.savefig(self.save_folder + fname, dpi=500)
+        plt.savefig(self.save_folder + fname, dpi=250)
 
     def plot_loss_history(self, fname):
         plt.figure(figsize=(15, 15))
@@ -218,7 +218,7 @@ class Visualizer:
         plt.legend(['train ELBO', 'validation ELBO'])
 
         logging.info('Saved loss plot at {}'.format(self.save_folder + fname))
-        plt.savefig(self.save_folder + fname, dpi=500)
+        plt.savefig(self.save_folder + fname, dpi=250)
 
     def plot_latent_space(self, fname):
         # We unwrap the trajectories from the data object
@@ -231,11 +231,7 @@ class Visualizer:
         pred_z = self.model.decode(z0, samp_ts, return_z=True)
 
         # Dunno if this is necessary
-        orig_trajs = orig_trajs.cpu()
-        samp_trajs = samp_trajs.cpu()
-        z0 = z0.cpu().detach().numpy()
         pred_z = pred_z.cpu().detach().numpy()
-        pred_x = pred_x.cpu().detach().numpy()
 
         # We create the plot
         plt.figure(figsize=(15, 15))
@@ -243,7 +239,7 @@ class Visualizer:
             plt.subplot(3, 3, i + 1)
             plt.scatter(x=pred_z[i, :, 0], y=pred_z[i, :, 1], color='r')
         plt.legend(['pred_z,'])
-        plt.savefig(fname, dpi=500)
+        plt.savefig(fname, dpi=250)
         plt.show()
 
     def plot_extrapolation(self):

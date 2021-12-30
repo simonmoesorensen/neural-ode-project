@@ -66,12 +66,15 @@ class LatentODEfunc(nn.Module):
         self.nfe = 0
 
     def forward(self, t, x):
-        self.nfe += 1
         out = self.fc1(x)
         out = self.elu(out)
         out = self.fc2(out)
         out = self.elu(out)
         out = self.fc3(out)
+
+        if out.requires_grad:
+            self.nfe += 1
+
         return out
 
 

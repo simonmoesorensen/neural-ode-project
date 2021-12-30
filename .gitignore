@@ -1,0 +1,7 @@
+# IDE folders and output folders of training the model
+.idea
+runs
+
+# Remove logs except for requirements txt
+*.txt
+!requirements.txt

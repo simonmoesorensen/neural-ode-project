@@ -1,0 +1,5 @@
+torch
+torchinfo
+torchdiffeq
+matplotlib
+numpy

@@ -55,13 +55,7 @@ class Trainer:
 
         logging.info(f"Loaded model from {path}")
 
-        # Get the version from next index where v is 'runs/model_1204_1635/ckpt/16_35_v3.pth'
-        try:
-            # TODO: Use regex to find multiple versions with two ciphers
-            version = int(path[path.find('v') + 1]) + 1
-        except:
-            # Version is final
-            version = 'final'
+        version = 0
         return trainer, version
 
     def train(self, version=0):

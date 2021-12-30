@@ -1,11 +1,11 @@
 import argparse
+
+import matplotlib
 import numpy as np
 import numpy.random as npr
-import matplotlib
 
 from src.data import Data
 from src.model import LSTMAutoEncoder, ODEAutoEncoder
-# from src.model import RNNBaseline
 from src.train import Trainer
 from src.utils import setup_folders
 from src.visualize import Visualizer
@@ -85,7 +85,6 @@ def generate_spiral2d(nspiral=1000,
         # t0_idx = np.argmax(t0_idx) + nsample
         t0_idx = int(ntotal * 0.3)
 
-
         cc = bool(npr.rand() > .5)  # uniformly select rotation
         orig_traj = orig_traj_cc if cc else orig_traj_cw
         orig_traj = (orig_traj - orig_traj.mean()) / orig_traj.std()
@@ -125,10 +124,10 @@ if __name__ == '__main__':
     parser.add_argument('--baseline', action='store_true')
 
     args = parser.parse_args()
-    
+
     RUN_TIME = dt.now().strftime("%m%d_%H%M_%S")
     MODEL_TYPE = 'toy'
-    
+
     if args.dev:
         root = 'runs_dev'
     else:
@@ -138,8 +137,8 @@ if __name__ == '__main__':
     setup_folders(save_folder)
 
     logging.config.fileConfig("logger.ini",
-                            disable_existing_loggers=True,
-                            defaults={'logfilename': f'{save_folder}logs_{RUN_TIME}.txt'})
+                              disable_existing_loggers=True,
+                              defaults={'logfilename': f'{save_folder}logs_{RUN_TIME}.txt'})
 
     if args.dev:
         logging.info('Development run')
@@ -156,7 +155,7 @@ if __name__ == '__main__':
     lstm_nhidden = args.lstm_hidden_dim
     lstm_layers = args.lstm_layers
     obs_dim = args.obs_dim
-    
+
     # Data generation
     nspiral = args.num_data
     start = 0.
@@ -171,7 +170,7 @@ if __name__ == '__main__':
     device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
 
     logging.info(f'On device {device}')
-    
+
     data = Data.from_func(generate_spiral2d,
                           device=device,
                           nspiral=nspiral,
@@ -197,7 +196,7 @@ if __name__ == '__main__':
                                 obs_dim=obs_dim,
                                 hidden_dim=lstm_nhidden,
                                 device=device)
-    
+
     optimizer = optim.Adam(model.get_params(), lr=args.lr)
     logging.info(f"Optimizer: {optimizer}")
 
@@ -208,12 +207,12 @@ if __name__ == '__main__':
             model_class = ODEAutoEncoder
         else:
             model_class = LSTMAutoEncoder
-            
+
         trainer, version = Trainer.from_checkpoint(model_class,
-                                                args.load_dir,
-                                                args.epochs,
-                                                args.freq,
-                                                save_folder)
+                                                   args.load_dir,
+                                                   args.epochs,
+                                                   args.freq,
+                                                   save_folder)
     else:
         trainer = Trainer(model=model,
                           optim=optimizer,

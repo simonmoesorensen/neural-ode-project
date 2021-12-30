@@ -1,6 +1,6 @@
 import logging
-import numpy as np
 
+import numpy as np
 import torch
 
 
@@ -56,7 +56,7 @@ class Data:
         return self.orig_trajs, self.samp_trajs, self.orig_ts, self.samp_ts
 
     @classmethod
-    def from_dict(cls, dict, device = None):
+    def from_dict(cls, dict, device=None):
         return cls(
             dict['orig_trajs'],
             dict['samp_trajs'],

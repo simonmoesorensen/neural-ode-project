@@ -1,8 +1,9 @@
 import argparse
+import random
+
+import matplotlib
 import numpy as np
 import numpy.random as npr
-import matplotlib
-import random
 
 from src.data import Data
 from src.model import ODEAutoEncoder, LSTMAutoEncoder
@@ -22,9 +23,10 @@ import logging.config
 
 npr.seed(42)
 
+
 def generate_spring2d(nsprings=100, ntotal=500, nsample=100, start=0., stop=1, a=1, b=1, c=0, skip=1, save_folder=None):
     # skip = 1 means no skipping
-    
+
     orig_ts = np.linspace(start, stop, num=ntotal)
     # samp_ts = np.linspace(start, stop, num=nsample) # If we want samples across the full range
     samp_ts = orig_ts[:nsample:skip]  # If we want to grab the first samples
@@ -36,7 +38,7 @@ def generate_spring2d(nsprings=100, ntotal=500, nsample=100, start=0., stop=1, a
 
     for _ in range(nsprings):
         # We sample for new spring solutions
-        #a_sample = np.random.normal(a) # we remove noise on frequency
+        # a_sample = np.random.normal(a) # we remove noise on frequency
         a_sample = 1
         b_sample = np.random.normal(b)
         c_sample = np.random.normal(c)
@@ -49,10 +51,10 @@ def generate_spring2d(nsprings=100, ntotal=500, nsample=100, start=0., stop=1, a
 
         # We generate the data for the original and sample springs
         if example == 1:
-            orig_xs, orig_ys = orig_ts, b_sample * -1/2 * np.cos(2 * orig_ts) + 1/6 * np.sin(
+            orig_xs, orig_ys = orig_ts, b_sample * -1 / 2 * np.cos(2 * orig_ts) + 1 / 6 * np.sin(
                 a_sample * 2 * orig_ts) + c_sample
         elif example == 2:
-            #a_sample = np.random.normal(a, 0.25)
+            # a_sample = np.random.normal(a, 0.25)
             a_sample = 1
             orig_xs, orig_ys = orig_ts, b_sample * 0.252096 * np.exp(0.2 * -5 / 2 * orig_ts) * np.cos(
                 0.2 * a_sample * np.sqrt(119) / 0.5 * orig_ts - 3.2321) + c_sample
@@ -73,7 +75,7 @@ def generate_spring2d(nsprings=100, ntotal=500, nsample=100, start=0., stop=1, a
         # t0_idx = npr.multinomial(.5, [1. / (ntotal - nsample)] * (ntotal - nsample))
         # t0_idx = np.argmax(t0_idx)
         t0_idx = int(ntotal * 0.05)
-        
+
         orig_trajs.append(orig_traj)
 
         # Sample trajectories from original trajectory
@@ -104,7 +106,7 @@ if __name__ == '__main__':
     parser.add_argument('--epochs', type=int, default=10)
     parser.add_argument('--freq', type=int, default=50)
     parser.add_argument('--lr', type=float, default=1e-2)
-    parser.add_argument('--load-dir', type=str, default='')   
+    parser.add_argument('--load-dir', type=str, default='')
     parser.add_argument('--obs-dim', type=int, default=2)
     parser.add_argument('--latent-dim', type=int, default=4)
     parser.add_argument('--hidden-dim', type=int, default=20)
@@ -114,15 +116,15 @@ if __name__ == '__main__':
     parser.add_argument('--n-total', type=int, default=200)
     parser.add_argument('--n-sample', type=int, default=120)
     parser.add_argument('--n-skip', type=int, default=1)
-    parser.add_argument('--example', nargs='+',type=int, default=None)
+    parser.add_argument('--example', nargs='+', type=int, default=None)
     parser.add_argument('--solver', type=str, default='rk4')
     parser.add_argument('--baseline', action='store_true')
 
     args = parser.parse_args()
-    
+
     RUN_TIME = dt.now().strftime("%m%d_%H%M_%S")
     MODEL_TYPE = 'spring'
-    
+
     if args.dev:
         root = 'runs_dev'
     else:
@@ -132,8 +134,8 @@ if __name__ == '__main__':
     setup_folders(save_folder)
 
     logging.config.fileConfig("logger.ini",
-                            disable_existing_loggers=True,
-                            defaults={'logfilename': f'{save_folder}logs_{RUN_TIME}.txt'})
+                              disable_existing_loggers=True,
+                              defaults={'logfilename': f'{save_folder}logs_{RUN_TIME}.txt'})
 
     if args.dev:
         logging.info('Development run')
@@ -192,7 +194,7 @@ if __name__ == '__main__':
                                 obs_dim=obs_dim,
                                 hidden_dim=lstm_nhidden,
                                 device=device)
-    
+
     optimizer = optim.Adam(model.get_params(), lr=args.lr)
     logging.info(f"Optimizer: {optimizer}")
 
@@ -203,12 +205,12 @@ if __name__ == '__main__':
             model_class = ODEAutoEncoder
         else:
             model_class = LSTMAutoEncoder
-            
+
         trainer, version = Trainer.from_checkpoint(model_class,
-                                                args.load_dir,
-                                                args.epochs,
-                                                args.freq,
-                                                save_folder)
+                                                   args.load_dir,
+                                                   args.epochs,
+                                                   args.freq,
+                                                   save_folder)
     else:
         trainer = Trainer(model=model,
                           optim=optimizer,

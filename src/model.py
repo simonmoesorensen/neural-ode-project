@@ -1,10 +1,9 @@
 import logging
-import os
 
+import numpy as np
 import torch
 import torch.nn as nn
 from torchdiffeq import odeint_adjoint as odeint
-import numpy as np
 
 
 ###########################################

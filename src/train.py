@@ -1,14 +1,14 @@
 import logging
 import os
 import time
+from datetime import datetime as dt
+
+import numpy as np
 import torch
 from torch import optim
-import numpy as np
 
 from src.data import Data
 from src.model import ODEAutoEncoder, TrainerModel
-from datetime import datetime as dt
-
 from src.visualize import Visualizer
 
 

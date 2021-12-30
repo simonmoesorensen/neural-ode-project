@@ -275,8 +275,8 @@ class LSTMAutoEncoder(TrainerModel):
 
     def get_params(self):
         return list(self.encoder.parameters()) + list(self.decoder.parameters()) + \
-            list(self.fc1.parameters()) + \
-            list(self.fc2.parameters())
+               list(self.fc1.parameters()) + \
+               list(self.fc2.parameters())
 
     def get_args(self):
         return {'latent_dim': self.latent_dim,
@@ -320,6 +320,7 @@ class ODEAutoEncoder(TrainerModel):
         self.decoder = Decoder(latent_dim, obs_dim, hidden_dim).to(device)
 
         self.odefunc = LatentODEfunc(latent_dim, hidden_dim).to(device)
+        self.nfe_list = []  # Length of nfe_list is number of epochs
 
     def forward(self, x, t, return_z0=False):
         # Encode
@@ -379,7 +380,18 @@ class ODEAutoEncoder(TrainerModel):
                                 pz0_mean, pz0_logvar).sum(-1)
 
         elbo = torch.mean(-logpx + analytic_kl, dim=0)
+
+        if elbo.requires_grad:
+            self.save_nfe()
+
         return elbo
+
+    def save_nfe(self):
+        # save number of current forward passes
+        self.nfe_list.append(self.odefunc.nfe)
+        # Reset for next epoch
+        self.odefunc.nfe = 0
+        return
 
     @classmethod
     def from_checkpoint(cls, path):
@@ -388,6 +400,9 @@ class ODEAutoEncoder(TrainerModel):
         model.odefunc.load_state_dict(obj['odefunc_state_dict'])
         model.encoder.load_state_dict(obj['encoder_state_dict'])
         model.decoder.load_state_dict(obj['decoder_state_dict'])
+
+        if 'nfe_list' in obj:
+            model.nfe_list = obj['nfe_list']
 
         model.train_loss = obj['train_loss']
         model.val_loss = obj['val_loss']
@@ -409,4 +424,5 @@ class ODEAutoEncoder(TrainerModel):
     def get_state_dicts(self):
         return {'odefunc_state_dict': self.odefunc.state_dict(),
                 'encoder_state_dict': self.encoder.state_dict(),
-                'decoder_state_dict': self.decoder.state_dict()}
+                'decoder_state_dict': self.decoder.state_dict(),
+                'nfe_list': self.nfe_list}

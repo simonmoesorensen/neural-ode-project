@@ -5,3 +5,6 @@ runs
 # Remove logs except for requirements txt
 *.txt
 !requirements.txt
+
+# Remove submit scripts
+*.sh

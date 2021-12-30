@@ -7,7 +7,7 @@ Simon Moe Sørensen, s174420@dtu.dk
 
 
 # Introduction
-This repo contains the code used for the paper [INSERT TITLE]().
+This repo contains the code used for the paper [Time series data estimation using Neural ODE in Variational Auto Encoders]().
 
 Using pytorch and Neural ODEs (NODEs) it attempts to learn the true dynamics of time series data using 
 toy examples such as clockwise and counterclockwise spirals, and three different examples of sine waves: 

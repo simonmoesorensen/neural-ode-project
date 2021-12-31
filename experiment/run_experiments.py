@@ -15,7 +15,24 @@ def run():
     models_path = []
     models_class = []
     models_name = []
-    # SPRINGS:
+
+    ##########################
+    # SPIRAL
+    ##########################
+
+    # BASELINE
+    models_path.append('experiment/baseline_ckpt/toy/12_52_vfinal.pth')
+    models_class.append(LSTMAutoEncoder)
+    models_name.append('Toy_Baseline_AE')
+    # NEURAL ODE
+    models_path.append('experiment/final_ckpt/toy/12_23_v46.pth')
+    models_class.append(ODEAutoEncoder)
+    models_name.append('Toy_ODE_VAE')
+
+    ##########################
+    # SPRINGS
+    ##########################
+
     # BASELINE
     models_path.append('experiment/baseline_ckpt/spring/example1/15_56_vfinal.pth')  # ex1
     models_path.append('experiment/baseline_ckpt/spring/example2/15_56_vfinal.pth')  # ex2
@@ -52,23 +69,16 @@ def run():
     models_name.append('Spring_13_ODE_VAE')
     models_name.append('Spring_23_ODE_VAE')
     models_name.append('Spring_123_ODE_VAE')
-    # TOY
-    # BASELINE
-    models_path.append('experiment/baseline_ckpt/toy/14_07_vfinal.pth')
-    models_class.append(LSTMAutoEncoder)
-    models_name.append('Toy_Baseline_AE')
-    # NEURAL ODE
-    # models_path.append('experiment/final_ckpt/toy/toy_RNN.pth')
-    models_path.append('experiment/final_ckpt/toy/14_39_vfinal.pth')  # this guy can't extrapolate
-    models_class.append(ODEAutoEncoder)
-    models_name.append('Toy_ODE_VAE')
+
+    ##########################
     # REAL
+    ##########################
+
     # BASELINE
     models_path.append('experiment/baseline_ckpt/real/14_07_vfinal.pth')
     models_class.append(LSTMAutoEncoder)
     models_name.append('Real_Baseline_AE')
     # NEURAL ODE
-    # models_path.append('experiment/final_ckpt/real/real_LSTM.pth')
     models_path.append('experiment/final_ckpt/real/14_41_vfinal.pth')
     models_class.append(ODEAutoEncoder)
     models_name.append('Real_ODE_VAE')

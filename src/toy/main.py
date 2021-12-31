@@ -160,7 +160,7 @@ if __name__ == '__main__':
     nspiral = args.num_data
     start = 0.
     stop = 6 * np.pi
-    noise_std = .15
+    noise_std = .075
     a = 0.
     b = .3
     ntotal = args.n_total

@@ -251,13 +251,15 @@ class Visualizer:
         return torch.sqrt(torch.mean((yhat - y) ** 2))
 
     def computeRMSE_VAE(self, samp_trajs, samp_ts):
-        pred_x_rmse = self.model.forward(samp_trajs, samp_ts)
-        rmse_loss = self.RMSELoss(pred_x_rmse, samp_trajs)
+        with torch.no_grad():
+            pred_x_rmse = self.model.forward(samp_trajs, samp_ts)
+            rmse_loss = self.RMSELoss(pred_x_rmse, samp_trajs)
 
-        return (rmse_loss.cpu().detach().numpy(), pred_x_rmse)
+            return (rmse_loss.cpu().detach().numpy(), pred_x_rmse)
 
-    def computeRMSE_AE(self, samp_trajs, samp_ts):
-        pred_x_rmse = self.model.forward(samp_trajs)
-        rmse_loss = self.RMSELoss(pred_x_rmse, samp_trajs)
+    def computeRMSE_AE(self, samp_trajs):
+        with torch.no_grad():
+            pred_x_rmse = self.model.forward(samp_trajs)
+            rmse_loss = self.RMSELoss(pred_x_rmse, samp_trajs)
 
-        return (rmse_loss.cpu().detach().numpy(), pred_x_rmse)
+            return (rmse_loss.cpu().detach().numpy(), pred_x_rmse)

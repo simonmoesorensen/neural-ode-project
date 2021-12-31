@@ -20,55 +20,55 @@ def run(plot=True):
     # SPIRAL
     ##########################
 
-    # BASELINE
-    models_path.append('experiment/baseline_ckpt/toy/12_52_vfinal.pth')
-    models_class.append(LSTMAutoEncoder)
-    models_name.append('Toy_Baseline_AE')
-    # NEURAL ODE
-    models_path.append('experiment/final_ckpt/toy/12_23_v46.pth')
-    models_class.append(ODEAutoEncoder)
-    models_name.append('Toy_ODE_VAE')
-
-    ##########################
-    # SPRINGS
-    ##########################
-
-    # BASELINE
-    models_path.append('experiment/baseline_ckpt/spring/example1/15_56_vfinal.pth')  # ex1
-    models_path.append('experiment/baseline_ckpt/spring/example2/15_56_vfinal.pth')  # ex2
-    models_path.append('experiment/baseline_ckpt/spring/example3/12_03_vfinal.pth')  # ex3
-    models_path.append('experiment/baseline_ckpt/spring/example12/16_13_vfinal.pth')  # ex 1 2
-    models_path.append('experiment/baseline_ckpt/spring/example13/15_57_vfinal.pth')  # ex 1 3
-    models_path.append('experiment/baseline_ckpt/spring/example23/15_58_vfinal.pth')  # ex 2 3
-    models_path.append('experiment/baseline_ckpt/spring/example123/15_57_vfinal.pth')  # ex 1 2 3
-    for i in range(7):
-        models_class.append(LSTMAutoEncoder)
-    models_name.append('Spring_1_Baseline_AE')
-    models_name.append('Spring_2_Baseline_AE')
-    models_name.append('Spring_3_Baseline_AE')
-    models_name.append('Spring_12_Baseline_AE')
-    models_name.append('Spring_13_Baseline_AE')
-    models_name.append('Spring_23_Baseline_AE')
-    models_name.append('Spring_123_Baseline_AE')
-
-    # NEURAL ODE
-    models_path.append('experiment/final_ckpt/spring/example1/03_57_vfinal.pth')  # ex1
-    models_path.append('experiment/final_ckpt/spring/example2/02_32_vfinal.pth')  # ex2
-    models_path.append('experiment/final_ckpt/spring/example3/02_26_vfinal.pth')  # ex3
-    models_path.append('experiment/final_ckpt/spring/example12/01_05_vfinal.pth')  # ex 1 2
-    models_path.append('experiment/final_ckpt/spring/example13/03_06_vfinal.pth')  # ex 1 3
-    models_path.append('experiment/final_ckpt/spring/example23/02_29_vfinal.pth')  # ex 2 3
-    models_path.append('experiment/final_ckpt/spring/example123/01_56_vfinal.pth')  # ex 1 2 3
-
-    for i in range(7):
-        models_class.append(ODEAutoEncoder)
-    models_name.append('Spring_1_ODE_VAE')
-    models_name.append('Spring_2_ODE_VAE')
-    models_name.append('Spring_3_ODE_VAE')
-    models_name.append('Spring_12_ODE_VAE')
-    models_name.append('Spring_13_ODE_VAE')
-    models_name.append('Spring_23_ODE_VAE')
-    models_name.append('Spring_123_ODE_VAE')
+    # # BASELINE
+    # models_path.append('experiment/baseline_ckpt/toy/12_52_vfinal.pth')
+    # models_class.append(LSTMAutoEncoder)
+    # models_name.append('Toy_Baseline_AE')
+    # # NEURAL ODE
+    # models_path.append('experiment/final_ckpt/toy/12_23_v46.pth')
+    # models_class.append(ODEAutoEncoder)
+    # models_name.append('Toy_ODE_VAE')
+    #
+    # ##########################
+    # # SPRINGS
+    # ##########################
+    #
+    # # BASELINE
+    # models_path.append('experiment/baseline_ckpt/spring/example1/15_56_vfinal.pth')  # ex1
+    # models_path.append('experiment/baseline_ckpt/spring/example2/15_56_vfinal.pth')  # ex2
+    # models_path.append('experiment/baseline_ckpt/spring/example3/12_03_vfinal.pth')  # ex3
+    # models_path.append('experiment/baseline_ckpt/spring/example12/16_13_vfinal.pth')  # ex 1 2
+    # models_path.append('experiment/baseline_ckpt/spring/example13/15_57_vfinal.pth')  # ex 1 3
+    # models_path.append('experiment/baseline_ckpt/spring/example23/15_58_vfinal.pth')  # ex 2 3
+    # models_path.append('experiment/baseline_ckpt/spring/example123/15_57_vfinal.pth')  # ex 1 2 3
+    # for i in range(7):
+    #     models_class.append(LSTMAutoEncoder)
+    # models_name.append('Spring_1_Baseline_AE')
+    # models_name.append('Spring_2_Baseline_AE')
+    # models_name.append('Spring_3_Baseline_AE')
+    # models_name.append('Spring_12_Baseline_AE')
+    # models_name.append('Spring_13_Baseline_AE')
+    # models_name.append('Spring_23_Baseline_AE')
+    # models_name.append('Spring_123_Baseline_AE')
+    #
+    # # NEURAL ODE
+    # models_path.append('experiment/final_ckpt/spring/example1/03_57_vfinal.pth')  # ex1
+    # models_path.append('experiment/final_ckpt/spring/example2/02_32_vfinal.pth')  # ex2
+    # models_path.append('experiment/final_ckpt/spring/example3/02_26_vfinal.pth')  # ex3
+    # models_path.append('experiment/final_ckpt/spring/example12/01_05_vfinal.pth')  # ex 1 2
+    # models_path.append('experiment/final_ckpt/spring/example13/03_06_vfinal.pth')  # ex 1 3
+    # models_path.append('experiment/final_ckpt/spring/example23/02_29_vfinal.pth')  # ex 2 3
+    # models_path.append('experiment/final_ckpt/spring/example123/01_56_vfinal.pth')  # ex 1 2 3
+    #
+    # for i in range(7):
+    #     models_class.append(ODEAutoEncoder)
+    # models_name.append('Spring_1_ODE_VAE')
+    # models_name.append('Spring_2_ODE_VAE')
+    # models_name.append('Spring_3_ODE_VAE')
+    # models_name.append('Spring_12_ODE_VAE')
+    # models_name.append('Spring_13_ODE_VAE')
+    # models_name.append('Spring_23_ODE_VAE')
+    # models_name.append('Spring_123_ODE_VAE')
 
     ##########################
     # REAL

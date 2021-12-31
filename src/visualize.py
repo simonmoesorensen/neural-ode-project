@@ -80,11 +80,11 @@ class Visualizer:
                     plt.figure()
                     plt.plot(orig_trajs[idx, :, 0], orig_trajs[idx, :, 1], 'g', label='True trajectory', linewidth=2,
                              zorder=1)
-                    plt.plot(pred_x_rec[idx, :, 0], pred_x_rec[idx, :, 1], '-bo', color='r', markersize=3,
+                    plt.plot(pred_x_rec[idx, :, 0], pred_x_rec[idx, :, 1], '-o', color='r', markersize=3,
                              label='Reconstruction', zorder=3)
-                    plt.plot(pred_x_pos[idx, :, 0], pred_x_pos[idx, :, 1], '-bo', color='c', markersize=3,
+                    plt.plot(pred_x_pos[idx, :, 0], pred_x_pos[idx, :, 1], '-o', color='c', markersize=3,
                              label='Learned trajectory (t>0)', zorder=2)
-                    plt.plot(pred_x_neg[idx, :, 0], pred_x_neg[idx, :, 1], '-bo', color='c', markersize=3,
+                    plt.plot(pred_x_neg[idx, :, 0], pred_x_neg[idx, :, 1], '-o', color='c', markersize=3,
                              label='Learned trajectory (t<0)', zorder=2)
                     plt.scatter(samp_trajs[idx, :, 0], samp_trajs[idx, :, 1], color='b', label='Sampled data', s=10,
                                 zorder=2)
@@ -92,8 +92,8 @@ class Visualizer:
                 else:
                     plt.figure()
                     plt.plot(orig_trajs[idx, :, 0], orig_trajs[idx, :, 1], 'g', label='True trajectory', zorder=1)
-                    # plt.plot(pred_x_rec[idx, :, 0], pred_x_rec[idx, :, 1], '-bo', color = 'r', markersize = 3, label='Reconstruction', zorder=3)
-                    plt.plot(pred_x_pos[idx, :, 0], pred_x_pos[idx, :, 1], '-bo', color='c', markersize=3,
+                    # plt.plot(pred_x_rec[idx, :, 0], pred_x_rec[idx, :, 1], '-o', color = 'r', markersize = 3, label='Reconstruction', zorder=3)
+                    plt.plot(pred_x_pos[idx, :, 0], pred_x_pos[idx, :, 1], '-o', color='c', markersize=3,
                              label='Learned trajectory (t>0)', zorder=3)
                     plt.scatter(samp_trajs[idx, :, 0], samp_trajs[idx, :, 1], color='b', label='Sampled data', s=3,
                                 zorder=2)
@@ -162,17 +162,17 @@ class Visualizer:
                     orig_trajs_plt_x = (orig_trajs[i, :, 0] - min_traj_x) / (max_traj_x - min_traj_x)
 
                     plt.subplot(size, size, i + 1)
-                    plt.plot(pred_x_rec_plt_x, pred_x_rec_plt_y, '-bo', color='r', markersize=1, label='Reconstruction',
+                    plt.plot(pred_x_rec_plt_x, pred_x_rec_plt_y, '-o', color='r', markersize=1, label='Reconstruction',
                              zorder=3)
                     plt.plot(orig_trajs_plt_x, orig_trajs_plt_y, color='g', linewidth=1, label='True trajectory',
                              markersize=1, zorder=1)
                     if t_pos > 0:
-                        plt.plot(pred_x_pos_plt_x, pred_x_pos_plt_y, '-bo', color='c', markersize=3,
+                        plt.plot(pred_x_pos_plt_x, pred_x_pos_plt_y, '-o', color='c', markersize=3,
                                  label='Learned trajectory (t>0)', zorder=2)
                     if t_neg > 0:
                         pred_x_neg_plt_y = (pred_x_neg[i, :, 1] - min_traj_y) / (max_traj_y - min_traj_y)
                         pred_x_neg_plt_x = (pred_x_neg[i, :, 0] - min_traj_x) / (max_traj_x - min_traj_x)
-                        plt.plot(pred_x_neg_plt_x, pred_x_neg_plt_y, '-bo', color='c', markersize=3,
+                        plt.plot(pred_x_neg_plt_x, pred_x_neg_plt_y, '-o', color='c', markersize=3,
                                  label='Learned trajectory (t<0)', zorder=2)
 
                 plt.legend(

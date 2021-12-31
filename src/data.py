@@ -50,7 +50,7 @@ class Data:
         return self.samp_trajs_val, self.samp_ts
 
     def get_test_data(self):
-        return self.samp_trajs_test, self.samp_ts, self.orig_trajs_test
+        return self.samp_trajs_test, self.samp_ts, self.orig_trajs_test, self.orig_ts
 
     def get_all_data(self):
         return self.orig_trajs, self.samp_trajs, self.orig_ts, self.samp_ts

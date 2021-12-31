@@ -10,7 +10,7 @@ import torch
 import logging.config
 
 
-def run():
+def run(plot=True):
     ## INPUTS FOR RMSE
     models_path = []
     models_class = []
@@ -83,7 +83,7 @@ def run():
     models_class.append(ODEAutoEncoder)
     models_name.append('Real_ODE_VAE')
 
-    save_folder = 'experiment/RMSE_output/'
+    save_folder = 'experiment/output/'
     setup_folders(save_folder)
 
     logging.config.fileConfig("logger.ini",
@@ -104,7 +104,7 @@ def run():
                                                    folder=save_folder)
 
         # Set test set
-        samp_trajs_test, samp_ts_test, orig_trajs_test = trainer.data.get_test_data()
+        samp_trajs_test, samp_ts_test, orig_trajs_test, orig_ts_test = trainer.data.get_test_data()
 
         # We check the means
         means_samp_traj.append(torch.mean(samp_trajs_test))
@@ -114,47 +114,49 @@ def run():
         if models_class[i] == ODEAutoEncoder:
             RMSE, pred_x_rmse = trainer.visualizer.computeRMSE_VAE(samp_trajs_test, samp_ts_test)
         elif models_class[i] == LSTMAutoEncoder:
-            RMSE, pred_x_rmse = trainer.visualizer.computeRMSE_AE(samp_trajs_test, samp_ts_test)
+            RMSE, pred_x_rmse = trainer.visualizer.computeRMSE_AE(samp_trajs_test)
         else:
             raise ValueError(f'Model class {models_class[i]} not supported')
 
         means_recon.append(torch.mean(pred_x_rmse))
         RMSE_list.append(float(RMSE))
 
-        # We plot all the models | if baseline we have no extrapolation
-        if models_class[i] == LSTMAutoEncoder:
-            trainer.visualizer.plot_reconstruction(fname=f'reconstruction_{models_name[i]}.png', t_pos=0, t_neg=0,
-                                                   idx=0,
-                                                   test=True)
-            trainer.visualizer.plot_reconstruction_grid(fname=f"reconstruction_grid_{models_name[i]}.png", t_pos=0,
-                                                        t_neg=0,
-                                                        size=3, test=True)
-        else:
-            if models_name[i].split('_')[0] == 'Spring':
-                trainer.visualizer.plot_reconstruction(fname=f'reconstruction_{models_name[i]}.png',
-                                                       t_pos=1 / 2 * np.pi,
-                                                       t_neg=1 / 6 * np.pi, idx=25, test=True)
-                trainer.visualizer.plot_reconstruction_grid(fname=f"reconstruction_grid_{models_name[i]}.png",
-                                                            t_pos=1 / 2 * np.pi, t_neg=1 / 6 * np.pi, size=3, test=True)
-            elif models_name[i].split('_')[0] == 'Toy':
-                trainer.visualizer.plot_reconstruction(fname=f"reconstruction_{models_name[i]}.png",
-                                                       t_pos=1 / 16 * np.pi,
-                                                       t_neg=1 / 16 * np.pi, idx=0, test=True)
-                trainer.visualizer.plot_reconstruction_grid(fname=f"reconstruction_grid_{models_name[i]}.png",
-                                                            t_pos=1 / 16 * np.pi, t_neg=1 / 16 * np.pi, size=3,
-                                                            test=True)
-            elif models_name[i].split('_')[0] == 'Real':
-                trainer.visualizer.plot_reconstruction(fname=f"reconstruction_{models_name[i]}.png",
-                                                       t_pos=1 / 8 * np.pi,
-                                                       t_neg=1 / 8 * np.pi, idx=0, test=True)
+        if plot:
+            # We plot all the models | if baseline we have no extrapolation
+            if models_class[i] == LSTMAutoEncoder:
+                trainer.visualizer.plot_reconstruction(fname=f'reconstruction_{models_name[i]}.png', t_pos=0, t_neg=0,
+                                                       idx=0,
+                                                       test=True)
                 trainer.visualizer.plot_reconstruction_grid(fname=f"reconstruction_grid_{models_name[i]}.png", t_pos=0,
-                                                            t_neg=0, size=3, test=True)
+                                                            t_neg=0,
+                                                            size=3, test=True)
+            else:
+                if models_name[i].split('_')[0] == 'Spring':
+                    trainer.visualizer.plot_reconstruction(fname=f'reconstruction_{models_name[i]}.png',
+                                                           t_pos=1 / 2 * np.pi,
+                                                           t_neg=1 / 6 * np.pi, idx=25, test=True)
+                    trainer.visualizer.plot_reconstruction_grid(fname=f"reconstruction_grid_{models_name[i]}.png",
+                                                                t_pos=1 / 2 * np.pi, t_neg=1 / 6 * np.pi, size=3,
+                                                                test=True)
+                elif models_name[i].split('_')[0] == 'Toy':
+                    trainer.visualizer.plot_reconstruction(fname=f"reconstruction_{models_name[i]}.png",
+                                                           t_pos=1 / 16 * np.pi,
+                                                           t_neg=1 / 16 * np.pi, idx=0, test=True)
+                    trainer.visualizer.plot_reconstruction_grid(fname=f"reconstruction_grid_{models_name[i]}.png",
+                                                                t_pos=1 / 16 * np.pi, t_neg=1 / 16 * np.pi, size=3,
+                                                                test=True)
+                elif models_name[i].split('_')[0] == 'Real':
+                    trainer.visualizer.plot_reconstruction(fname=f"reconstruction_{models_name[i]}.png",
+                                                           t_pos=1 / 8 * np.pi,
+                                                           t_neg=1 / 8 * np.pi, idx=0, test=True)
+                    trainer.visualizer.plot_reconstruction_grid(fname=f"reconstruction_grid_{models_name[i]}.png",
+                                                                t_pos=0,
+                                                                t_neg=0, size=3, test=True)
 
     # We print the RMSE for each run
     for i in range(len(models_path)):
-        # print(models_name[i], "|", "RMSE:", RMSE_list[i], "samp trajs mean:", means_samp_traj[i], 'orig trajs mean:', means_orig_traj[i], "recon mean:", means_recon[i])
-        logging.info(models_name[i], "|", "RMSE:", RMSE_list[i])
+        logging.info(f'{models_name[i]} | RMSE: {RMSE_list[i]}')
 
 
 if __name__ == '__main__':
-    run()
+    run(plot=True)

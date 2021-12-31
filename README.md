@@ -60,4 +60,4 @@ Install Jupyter with `pip install jupyter` and run a server using `jupyter noteb
 such as Anaconda. 
 
 Then open `run_experiments.ipynb` and run the first cell. If the cell succeeds, you should see outputs in
-`experiment/RMSE_output/png/**`
+`experiment/output/png/**`

@@ -39,7 +39,7 @@ class Visualizer:
 
         # We make sure that we plot for the test sample trajectories if test = True
         if test:
-            samp_trajs, samp_ts, orig_trajs = self.data.get_test_data()
+            samp_trajs, samp_ts, orig_trajs, _ = self.data.get_test_data()
 
         with torch.no_grad():
             if isinstance(self.model, ODEAutoEncoder):
@@ -118,7 +118,7 @@ class Visualizer:
 
         # We make sure that we plot for the test sample trajectories if test = True
         if test:
-            samp_trajs, samp_ts, orig_trajs = self.data.get_test_data()
+            samp_trajs, samp_ts, orig_trajs, _ = self.data.get_test_data()
 
         with torch.no_grad():
             if isinstance(self.model, ODEAutoEncoder):

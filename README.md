@@ -12,7 +12,7 @@ This repo contains the code used for the paper [Time series data estimation usin
 Using pytorch and Neural ODEs (NODEs) it attempts to learn the true dynamics of time series data using 
 toy examples such as clockwise and counterclockwise spirals, and three different examples of sine waves: 
 first a standard non-dampened sine wave, second a dampened sine wave, third an exponentially decaying and 
-dampened sine wave. Finally, the NODE is trained on real world time series data of solar power efficiency.
+dampened sine wave. Finally, the NODE is trained on real world time series data of solar power curves.
 
 The performance of the NODEs are compared to an LSTM VAE baseline on RMSE error and time per epoch.  
 
@@ -40,8 +40,8 @@ In addition, there are three folders for each type of dataset:
 - `spring/`: Generates spring examples and trains spring models
 - `toy/`: Generates spiral examples and trains spiral models
 
-Each `main.py` script takes a number of relevant parameters as input to enable parameter tuning and
-experimentation of different model types and dataset sizes and types. These can be read from the respective files.
+Each `main.py` script takes a number of relevant parameters as input to enable parameter tuning,
+experimentation of different model types, dataset sizes and types. These can be read from the respective files.
 
 # Running the code
 To run the code use the following code in a terminal with the project root as working directory:

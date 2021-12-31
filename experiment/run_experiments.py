@@ -83,6 +83,10 @@ def run(plot=True):
     models_class.append(ODEAutoEncoder)
     models_name.append('Real_ODE_VAE')
 
+    ##########################
+    # EXPERIMENT SCRIPT
+    ##########################
+
     save_folder = 'experiment/output/'
     setup_folders(save_folder)
 
@@ -140,10 +144,10 @@ def run(plot=True):
                                                                 test=True)
                 elif models_name[i].split('_')[0] == 'Toy':
                     trainer.visualizer.plot_reconstruction(fname=f"reconstruction_{models_name[i]}.png",
-                                                           t_pos=1 / 16 * np.pi,
-                                                           t_neg=1 / 16 * np.pi, idx=0, test=True)
+                                                           t_pos=1 / 2 * np.pi,
+                                                           t_neg=2 / 3 * np.pi, idx=0, test=True)
                     trainer.visualizer.plot_reconstruction_grid(fname=f"reconstruction_grid_{models_name[i]}.png",
-                                                                t_pos=1 / 16 * np.pi, t_neg=1 / 16 * np.pi, size=3,
+                                                                t_pos=1 / 2 * np.pi, t_neg=2 / 3 * np.pi, size=3,
                                                                 test=True)
                 elif models_name[i].split('_')[0] == 'Real':
                     trainer.visualizer.plot_reconstruction(fname=f"reconstruction_{models_name[i]}.png",

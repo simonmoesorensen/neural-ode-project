@@ -10,6 +10,9 @@ plt.style.use('ggplot')
 import logging
 from datetime import datetime as dt
 
+from sklearn.decomposition import PCA
+
+
 
 class Visualizer:
     def __init__(self, model, data: Data, save_folder: str):
@@ -32,6 +35,68 @@ class Visualizer:
         self.plot_loss_history(fname + '_loss_history.png')
         self.plot_reconstruction_grid(fname + '_reconstruction_grid.png', t_pos=t_pos, t_neg=t_neg)
         self.plot_original_grid(fname + '_original_grid.png')
+
+    def latent_vis(self, fname, idx=0, test=False):
+        # We unwrap the trajectories from the data object
+        orig_trajs, samp_trajs, _, samp_ts = self.data.get_all_data()
+
+        # We make sure that we plot for the test sample trajectories if test = True
+        if test:
+            samp_trajs, samp_ts, orig_trajs, _ = self.data.get_test_data()
+
+        with torch.no_grad():
+            if isinstance(self.model, ODEAutoEncoder):
+                # We forward pass to extract pred_x and z0 (we will only use z0)
+                qz0_mean, qz0_logvar, epsilon = self.model.encode(samp_trajs)
+
+                # Sample z0 (vector) from q(z0)
+                z0 = self.model.sample_z0(epsilon, qz0_logvar, qz0_mean)
+                # print(z0.size())
+                # print(z0)
+
+                ts_rmse = torch.from_numpy(np.linspace(0., torch.max(samp_ts), num=len(samp_ts))).to(self.device)
+                pred_x, pred_z = self.model.decode(z0, ts_rmse, return_z=True)
+                
+                # print(pred_z.size())
+                # print(pred_z)
+
+                pca_z=PCA(n_components=2)
+                pca_z.fit(pred_z[0,:,:])
+                # print(pca_z.explained_variance_ratio_)
+                pred_z_red=pca_z.fit_transform(pred_z[idx,:,:])
+                # print(pred_z_red.shape)
+
+                pca=PCA(n_components=2)
+                pca.fit(z0)
+                print("Explained variance:", pca.explained_variance_ratio_)
+                z0_red=pca.fit_transform(z0)
+
+                # print(z0_red.shape)
+                # print(z0_red[0,:].shape)
+
+                #z0 latent space plot
+                plt.figure()
+                plt.plot(z0_red[:,0], z0_red[:,1], 'o', label='z0 samples in 2D', linewidth=2,
+                            zorder=1)
+                plt.legend()
+
+                logging.info('Saved reconstruction at {}'.format(self.save_folder + fname))
+                plt.savefig(self.save_folder+'z0' + fname, dpi=250)
+
+                #Figure out how to cluster!!! we have the labels somewhere
+                plt.figure()
+                plt.plot(pred_z_red[:,0], pred_z_red[:,1], 'o', label='latent traj', linewidth=2,
+                            zorder=1)
+                plt.legend()
+
+                logging.info('Saved reconstruction at {}'.format(self.save_folder + fname))
+                plt.savefig(self.save_folder+'traj' + fname, dpi=250)
+            
+
+            elif isinstance(self.model, LSTMAutoEncoder):
+                logging.info('Cannot sample latent space from Autoencoder baseline')
+
+            
 
     def plot_reconstruction(self, fname, t_pos=np.pi, t_neg=np.pi, idx=0, test=False):
         # We unwrap the trajectories from the data object
@@ -256,6 +321,7 @@ class Visualizer:
             rmse_loss = self.RMSELoss(pred_x_rmse, samp_trajs)
 
             return (rmse_loss.cpu().detach().numpy(), pred_x_rmse)
+
 
     def computeRMSE_AE(self, samp_trajs):
         with torch.no_grad():

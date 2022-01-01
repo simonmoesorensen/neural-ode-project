@@ -41,6 +41,7 @@ def run(plot=True):
     models_path.append('experiment/baseline_ckpt/spring/example13/15_57_vfinal.pth')  # ex 1 3
     models_path.append('experiment/baseline_ckpt/spring/example23/15_58_vfinal.pth')  # ex 2 3
     models_path.append('experiment/baseline_ckpt/spring/example123/15_57_vfinal.pth')  # ex 1 2 3
+    
     for i in range(7):
         models_class.append(LSTMAutoEncoder)
     models_name.append('Spring_1_Baseline_AE')
@@ -142,6 +143,9 @@ def run(plot=True):
                     trainer.visualizer.plot_reconstruction_grid(fname=f"reconstruction_grid_{models_name[i]}.png",
                                                                 t_pos=1 / 2 * np.pi, t_neg=1 / 6 * np.pi, size=3,
                                                                 test=True)
+                    trainer.visualizer.latent_vis(fname=f'latentspace_{models_name[i]}.png',
+                                    idx=0,
+                                    test=True)
                 elif models_name[i].split('_')[0] == 'Toy':
                     trainer.visualizer.plot_reconstruction(fname=f"reconstruction_{models_name[i]}.png",
                                                            t_pos=1 / 2 * np.pi,
@@ -149,6 +153,9 @@ def run(plot=True):
                     trainer.visualizer.plot_reconstruction_grid(fname=f"reconstruction_grid_{models_name[i]}.png",
                                                                 t_pos=1 / 2 * np.pi, t_neg=2 / 3 * np.pi, size=3,
                                                                 test=True)
+                    trainer.visualizer.latent_vis(fname=f'latentspace_{models_name[i]}.png',
+                                    idx=0,
+                                    test=True)
                 elif models_name[i].split('_')[0] == 'Real':
                     trainer.visualizer.plot_reconstruction(fname=f"reconstruction_{models_name[i]}.png",
                                                            t_pos=1 / 8 * np.pi,
@@ -156,6 +163,9 @@ def run(plot=True):
                     trainer.visualizer.plot_reconstruction_grid(fname=f"reconstruction_grid_{models_name[i]}.png",
                                                                 t_pos=0,
                                                                 t_neg=0, size=3, test=True)
+                    trainer.visualizer.latent_vis(fname=f'latentspace_{models_name[i]}.png',
+                                                       idx=0,
+                                                       test=True)
 
     # We print the RMSE for each run
     for i in range(len(models_path)):

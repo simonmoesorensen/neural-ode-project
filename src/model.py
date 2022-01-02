@@ -93,7 +93,7 @@ class RecognitionRNN(nn.Module):
 
     def forward(self, x, h):
         combined = torch.cat((x, h), dim=1)
-        h = torch.tanh(self.i2h(combined))
+        h = self.i2h(combined)
         out = self.h2o(h)
         return out, h
 
@@ -121,7 +121,6 @@ class LSTMEncoder(nn.Module):
 
     def forward(self, x, h, c):
         hn, cn = self.lstm(x, (h, c))
-        hn = torch.tanh(hn)
         out = self.h2o(hn)
         return out, hn, cn
 
@@ -158,9 +157,7 @@ class LSTMBaseline(nn.Module):
         # Map inputs to hidden state from x -> h1
         # Map hidden state to latent dimension h1 -> h2
         hn1, cn1 = self.lstm(x, (h1, c1))
-        hn1 = torch.tanh(hn1)
         hn2, cn2 = self.lstm2(hn1, (h2, c2))
-        hn2 = torch.tanh(hn2)
         return hn1, cn1, hn2, cn2
 
     def forward_sequence(self, x, device):

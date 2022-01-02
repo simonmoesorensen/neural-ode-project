@@ -93,7 +93,7 @@ class RecognitionRNN(nn.Module):
 
     def forward(self, x, h):
         combined = torch.cat((x, h), dim=1)
-        h = self.i2h(combined)
+        h = torch.tanh(self.i2h(combined))
         out = self.h2o(h)
         return out, h
 

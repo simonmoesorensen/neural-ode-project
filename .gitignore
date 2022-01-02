@@ -3,9 +3,10 @@
 runs
 runs_dev
 
-# Remove logs except for requirements txt
+# Remove logs except for requirements and rmse
 *.txt
 !requirements.txt
+!rmse.txt
 
 # Remove submit scripts
 *.sh

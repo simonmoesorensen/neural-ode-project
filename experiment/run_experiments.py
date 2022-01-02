@@ -198,9 +198,11 @@ def run(plot=True, lat_vis=True, z_idx=None):
                     #                                    idx=0,
                     #                                    test=True)
 
-    # We print the RMSE for each run
-    for i in range(len(models_path)):
-        logging.info(f'{models_name[i]} | RMSE: {RMSE_list[i]}')
+    # We print and write the RMSE for each run
+    with open(save_folder + 'RMSE.txt', 'w') as file:
+        for i in range(len(models_path)):
+            file.write(f'{models_name[i]} | RMSE: {RMSE_list[i]}\n')
+            logging.info(f'{models_name[i]} | RMSE: {RMSE_list[i]}')
 
 
 if __name__ == '__main__':

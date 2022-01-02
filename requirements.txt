@@ -3,3 +3,4 @@ torchinfo
 torchdiffeq
 matplotlib
 numpy
+sklearn

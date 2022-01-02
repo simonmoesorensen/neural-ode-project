@@ -11,6 +11,7 @@ import logging
 from datetime import datetime as dt
 
 from sklearn.decomposition import PCA
+import pandas as pd
 
 
 
@@ -36,35 +37,36 @@ class Visualizer:
         self.plot_reconstruction_grid(fname + '_reconstruction_grid.png', t_pos=t_pos, t_neg=t_neg)
         self.plot_original_grid(fname + '_original_grid.png')
 
-    def latent_vis(self, fname, idx=0, test=False):
+    def latent_vis(self, fname, z_traj_idx=None, test=False,label=None,saved_data=None):
         # We unwrap the trajectories from the data object
-        orig_trajs, samp_trajs, _, samp_ts = self.data.get_all_data()
-
+        
+        # print(label)
+        
+        # print(label)
         # We make sure that we plot for the test sample trajectories if test = True
         if test:
             samp_trajs, samp_ts, orig_trajs, _ = self.data.get_test_data()
+            if label is None:
+                label = self.data.get_test_labels()
+        else:
+            orig_trajs, samp_trajs, _, samp_ts = self.data.get_all_data()
+            if label is None:
+                label = self.data.get_all_labels()
 
+        print("samp_trajs size:", samp_trajs.size())
+        # print(samp_trajs)
         with torch.no_grad():
             if isinstance(self.model, ODEAutoEncoder):
                 # We forward pass to extract pred_x and z0 (we will only use z0)
-                qz0_mean, qz0_logvar, epsilon = self.model.encode(samp_trajs)
+                if saved_data is not None:
+                    qz0_mean, qz0_logvar, epsilon = self.model.encode(saved_data)
+                else:
+                    qz0_mean, qz0_logvar, epsilon = self.model.encode(samp_trajs)
 
                 # Sample z0 (vector) from q(z0)
                 z0 = self.model.sample_z0(epsilon, qz0_logvar, qz0_mean)
-                # print(z0.size())
+                print("z0 size",z0.size())
                 # print(z0)
-
-                ts_rmse = torch.from_numpy(np.linspace(0., torch.max(samp_ts), num=len(samp_ts))).to(self.device)
-                pred_x, pred_z = self.model.decode(z0, ts_rmse, return_z=True)
-                
-                # print(pred_z.size())
-                # print(pred_z)
-
-                pca_z=PCA(n_components=2)
-                pca_z.fit(pred_z[0,:,:])
-                # print(pca_z.explained_variance_ratio_)
-                pred_z_red=pca_z.fit_transform(pred_z[idx,:,:])
-                # print(pred_z_red.shape)
 
                 pca=PCA(n_components=2)
                 pca.fit(z0)
@@ -72,25 +74,56 @@ class Visualizer:
                 z0_red=pca.fit_transform(z0)
 
                 # print(z0_red.shape)
-                # print(z0_red[0,:].shape)
+                print(z0_red[:,0].shape)
+                print(len(label))
 
+                # df=pd.DataFrame(z0_red,label)
+                d={'PC1': z0_red[:,0], 'PC2':z0_red[:,1], 'Label': label}
+                df=pd.DataFrame(d)
+                
+                # print(len(df[df.Label==3].PC1))
+                
                 #z0 latent space plot
-                plt.figure()
-                plt.plot(z0_red[:,0], z0_red[:,1], 'o', label='z0 samples in 2D', linewidth=2,
-                            zorder=1)
-                plt.legend()
+                if label is not None:   
+                    plt.figure()
+                    #z0 samples in 2D
+                    for i in np.unique(label):
+                        colors=["dummy","#c4564f", "#51a66e", "#2697f0"]
+                        plt.plot(df[df.Label==i].PC1, df[df.Label==i].PC2, 'o', color=colors[i], label=f' Spring type {i}', linewidth=2,
+                                zorder=1)
+                    plt.legend()
+                else:
+                    plt.figure()
+                    plt.plot(z0_red[:,0], z0_red[:,1], 'o', label='z0 samples in 2D', linewidth=2,
+                                zorder=1)
+                    plt.legend()
 
                 logging.info('Saved reconstruction at {}'.format(self.save_folder + fname))
                 plt.savefig(self.save_folder+'z0' + fname, dpi=250)
+                if z_traj_idx is not None:
+                    ts_rmse = torch.from_numpy(np.linspace(0., torch.max(samp_ts), num=len(samp_ts))).to(self.device)
+                    pred_x, pred_z = self.model.decode(z0, ts_rmse, return_z=True)
+                    
+                    # print(pred_z.size())
+                    # print(pred_z)
 
-                #Figure out how to cluster!!! we have the labels somewhere
-                plt.figure()
-                plt.plot(pred_z_red[:,0], pred_z_red[:,1], 'o', label='latent traj', linewidth=2,
-                            zorder=1)
-                plt.legend()
+                    pca_z=PCA(n_components=2)
+                    pca_z.fit(pred_z[z_traj_idx,:,:])
+                    # print(pca_z.explained_variance_ratio_)
+                    pred_z_red=pca_z.fit_transform(pred_z[z_traj_idx,:,:])
+                    # print(pred_z_red.shape)
 
-                logging.info('Saved reconstruction at {}'.format(self.save_folder + fname))
-                plt.savefig(self.save_folder+'traj' + fname, dpi=250)
+                    stype=label[z_traj_idx]
+                    print(stype)
+                    plt.figure()
+                    plt.plot(pred_z_red[:,0], pred_z_red[:,1], 'o', color= colors[stype] , label=f'latent traj Spring type {stype}', linewidth=2,
+                                zorder=1)
+                    plt.legend()
+
+                    
+
+                    logging.info('Saved reconstruction at {}'.format(self.save_folder + fname))
+                    plt.savefig(self.save_folder+'z_traj' + fname, dpi=250)
             
 
             elif isinstance(self.model, LSTMAutoEncoder):
@@ -98,7 +131,7 @@ class Visualizer:
 
             
 
-    def plot_reconstruction(self, fname, t_pos=np.pi, t_neg=np.pi, idx=0, test=False):
+    def plot_reconstruction(self, fname, t_pos=np.pi, t_neg=np.pi, idx=0, test=False, toy=False):
         # We unwrap the trajectories from the data object
         orig_trajs, samp_trajs, _, samp_ts = self.data.get_all_data()
 

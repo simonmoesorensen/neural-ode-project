@@ -35,7 +35,7 @@ def generate_spring2d(nsprings=100, ntotal=500, nsample=100, start=0., stop=1, a
     # We generate multiple samples
     orig_trajs = []
     samp_trajs = []
-
+    data_lab = []
     for _ in range(nsprings):
         # We sample for new spring solutions
         # a_sample = np.random.normal(a) # we remove noise on frequency
@@ -48,7 +48,7 @@ def generate_spring2d(nsprings=100, ntotal=500, nsample=100, start=0., stop=1, a
             example = np.random.randint(1, 4)
         else:
             example = random.choice(args.example)
-
+        data_lab.append(example)
         # We generate the data for the original and sample springs
         if example == 1:
             orig_xs, orig_ys = orig_ts, b_sample * -1 / 2 * np.cos(2 * orig_ts) + 1 / 6 * np.sin(
@@ -90,13 +90,19 @@ def generate_spring2d(nsprings=100, ntotal=500, nsample=100, start=0., stop=1, a
         plt.figure()
         plt.plot(orig_trajs[0, :, 0], orig_trajs[0, :, 1], label='spring')
         plt.legend()
+
+        np.save(save_folder+f'data_lab_{np.unique(data_lab)}.npy',data_lab)
+        np.save(save_folder+f'samp_trajs{np.unique(data_lab)}.npy',samp_trajs)
+
         save_folder = f'{save_folder}png/'
 
         fname = save_folder + 'ground_truth.png'
         plt.savefig(fname, dpi=500)
         logging.info('Saved ground truth spiral at {}'.format(fname))
-
-    return orig_trajs, samp_trajs, orig_ts, samp_ts
+        print("data labels:", data_lab)
+        
+    
+    return orig_trajs, samp_trajs, orig_ts, samp_ts, data_lab
 
 
 if __name__ == '__main__':

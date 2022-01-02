@@ -45,6 +45,9 @@ class Trainer:
 
         data = Data.from_dict(obj['data'])
 
+        # if isinstance(model, autoen)
+        # data_lab = Data.from_dict(obj['data_lab'])
+
         visualizer = Visualizer(model, data, folder)
 
         trainer = cls(model, optimizer, data, epochs, freq,

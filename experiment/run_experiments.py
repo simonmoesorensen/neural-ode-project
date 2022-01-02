@@ -21,7 +21,7 @@ def run(plot=True):
     ##########################
 
     # BASELINE
-    models_path.append('experiment/baseline_ckpt/toy/12_52_vfinal.pth')
+    models_path.append('experiment/baseline_ckpt/toy/14_07_vfinal.pth')
     models_class.append(LSTMAutoEncoder)
     models_name.append('Toy_Baseline_AE')
     # NEURAL ODE
@@ -41,7 +41,7 @@ def run(plot=True):
     models_path.append('experiment/baseline_ckpt/spring/example13/15_57_vfinal.pth')  # ex 1 3
     models_path.append('experiment/baseline_ckpt/spring/example23/15_58_vfinal.pth')  # ex 2 3
     models_path.append('experiment/baseline_ckpt/spring/example123/15_57_vfinal.pth')  # ex 1 2 3
-    
+
     for i in range(7):
         models_class.append(LSTMAutoEncoder)
     models_name.append('Spring_1_Baseline_AE')

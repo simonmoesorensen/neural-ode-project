@@ -4,3 +4,4 @@ torchdiffeq
 matplotlib
 numpy
 sklearn
+pandas
